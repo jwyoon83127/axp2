@@ -3,13 +3,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Any
 import json, uuid
+import os
 from pathlib import Path
 from datetime import datetime
 
 app = FastAPI(title="사내 자동화 프로젝트 관리 API", version="1.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-DATA_DIR = Path(__file__).parent / "data"
+if os.environ.get("VERCEL"):
+    DATA_DIR = Path("/tmp/data")
+else:
+    DATA_DIR = Path(__file__).parent / "data"
+
 DATA_DIR.mkdir(exist_ok=True)
 
 # ── helpers ─────────────────────────────────────────────────────────────────
